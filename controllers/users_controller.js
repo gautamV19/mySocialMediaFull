@@ -86,3 +86,8 @@ module.exports.createSession = function (req, res) {
 };
 
 //Signout
+module.exports.endSession = function (req, res) {
+  // console.log("siging out...");
+  res.clearCookie("user_id");
+  return res.redirect("/users/sign-in");
+};
