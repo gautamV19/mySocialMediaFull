@@ -85,7 +85,7 @@ module.exports.createSession = function (req, res) {
   });
 };
 
-//Signout
+//Signout form server
 module.exports.endSession = function (req, res) {
   // console.log("siging out...");
   res.clearCookie("user_id");
