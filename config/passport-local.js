@@ -14,7 +14,9 @@ passport.use(
       //find a user and establish the identity
       User.findOne({ email: email }, function (err, user) {
         if (err) {
-          console.log("Error in finding user -- inside passport");
+          console.log(
+            "Error in finding user in authentication -- inside passport"
+          );
           return done(err);
         }
 
@@ -36,13 +38,28 @@ passport.serializeUser(function (user, done) {
 
 //deserializing the user from the key in the cookies
 passport.deserializeUser(function (id, done) {
-  User.findOne(id, function (err, user) {
+  User.findOne({ id }, function (err, user) {
     if (err) {
-      console.log("Error in finding user -- inside passport");
+      console.log("Error in finding user deserializeUser -- inside passport");
       return done(err);
     }
     return done(null, user);
   });
 });
+
+// check if user is authenticated
+passport.checkAuthentication = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  return res.redirect("/users/sign-in");
+};
+
+passport.setAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    // this will send user to local to see the views
+    res.local.user = req.user;
+  }
+};
 
 module.exports = passport;

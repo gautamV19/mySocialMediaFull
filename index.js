@@ -31,7 +31,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      maxAge: `${1000 * 60 * 5}`,
+      maxAge: Number(process.env.SESS_EXPIRY),
     },
   })
 );
