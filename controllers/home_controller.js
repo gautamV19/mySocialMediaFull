@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const User = require("../models/user");
 
 module.exports.home = function (req, res) {
   //   console.log(req.cookies);
@@ -28,10 +29,17 @@ module.exports.home = function (req, res) {
         console.log("Error in showing post");
         return;
       }
-      // console.log("your posts for home page", posts);
-      return res.render("home", {
-        title: "Home",
-        posts: posts,
+      User.find({}, function (err, users) {
+        if (err) {
+          console.log("Error in showing user");
+          return;
+        }
+        // console.log("your posts for home page", posts);
+        return res.render("home", {
+          title: "Home",
+          posts: posts,
+          all_users: users,
+        });
       });
     });
 };
