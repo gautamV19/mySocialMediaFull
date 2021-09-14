@@ -1,5 +1,18 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
-<h1>social / Profile Page</h1>
+<h1><a href="/"> social </a> Profile page</h1>
 
+<% if(locals.user.id==user_profile.id) {%>
+<form action="/users/update-profile/<%= user_profile.id %>" method="POST">
+  <p>name</p>
+  <input type="text" name="name" value="<%= user_profile.name %>" />
+  <p>email</p>
+  <input type="email" name="email" value="<%= user_profile.email %>" />
+  <!-- implement checking password also  -->
+  <!-- <p>Enter password</p> -->
+  <!-- <input type="password" name="password" /> -->
+  <input type="submit" value="Update" />
+</form>
+<% } else { %>
 <p><%= user_profile.name %></p>
 <p><%= user_profile.email %></p>
+<% } %>

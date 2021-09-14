@@ -72,3 +72,18 @@ module.exports.destroySession = function (req, res) {
 
   return res.redirect("/");
 };
+
+module.exports.updateProfile = function (req, res) {
+  // implement checking password also
+  if (req.params.id == req.user.id) {
+    User.findByIdAndUpdate(req.params.id, req.body, function (err, user) {
+      if (err) {
+        console.log("error in finding user for profile update");
+        return;
+      }
+      return res.redirect("back");
+    });
+  } else {
+    return res.status(401).send("Unauthorize");
+  }
+};

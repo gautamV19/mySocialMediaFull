@@ -24,4 +24,10 @@ router.post(
 
 router.get("/sign-out", usersController.destroySession);
 
+router.post(
+  "/update-profile/:id",
+  passport.checkAuthentication,
+  usersController.updateProfile
+);
+
 module.exports = router;
