@@ -1,7 +1,13 @@
-#post-list{
-    margin-left: 35%;
-}
-.comment-box{
-    background-color: lightblue;
-    border: blue 1px solid;
+#home-container{
+    display: flex;
+    justify-content: space-evenly;
+    #feed-posts{
+        width: 70%;
+        padding: 10%;
+        border-right: 1px solid black;
+    }
+    .user-friend{
+        width: 30%;
+        padding: 5%;
+    }
 }
