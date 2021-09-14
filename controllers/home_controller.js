@@ -17,12 +17,18 @@ module.exports.home = function (req, res) {
 
   Post.find({})
     .populate("user")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+      },
+    })
     .exec(function (err, posts) {
       if (err) {
         console.log("Error in showing post");
         return;
       }
-      console.log("your posts for home page", posts);
+      // console.log("your posts for home page", posts);
       return res.render("home", {
         title: "Home",
         posts: posts,
