@@ -2,15 +2,15 @@ const Comment = require("../models/comment");
 const Post = require("../models/post");
 
 module.exports.create = function (req, res) {
-  console.log(
-    "comments",
-    "content :",
-    req.body.content,
-    "user id :",
-    req.user._id,
-    "post id :",
-    req.body.post_id
-  );
+  // console.log(
+  //   "comments",
+  //   "content :",
+  //   req.body.content,
+  //   "user id :",
+  //   req.user._id,
+  //   "post id :",
+  //   req.body.post_id
+  // );
   Post.findOne({ _id: req.body.post_id }, function (err, post) {
     if (err) {
       console.log("error in finding post for comment", err);
