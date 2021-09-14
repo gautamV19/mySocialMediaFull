@@ -24,11 +24,18 @@ module.exports.create = function (req, res) {
           post: req.body.post_id,
         },
         function (err, comment) {
-          console.log("error in commenting on post", err, comment);
-          post.comments.push(comment);
-          post.save();
+          if (err) {
+            console.log("error in commenting on post", err);
+            return;
+          }
+          if (comment) {
+            console.log(comment);
+            post.comments.push(comment);
+            post.save();
+            console.log(post);
+          }
 
-          return res.redirect("back");
+          return res.end("/");
         }
       );
     }
