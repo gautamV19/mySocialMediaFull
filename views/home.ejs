@@ -36,10 +36,12 @@
       <% } %>
       <div class="post-comment-list">
         <ul class="post-comment">
-          <% for (comment in posts.comments) {%> <% console.log(comment) %>
-          <p><%= comment.content %></p>
-          <br />
-          <small> <%= comment.user.name %> </small>
+          <% for (comment of i.comments) {%> <% console.log(comment) %>
+          <li>
+            <p><%= comment.content %></p>
+            <small> <%= comment.user.name %> </small>
+          </li>
+
           <%} %>
         </ul>
       </div>

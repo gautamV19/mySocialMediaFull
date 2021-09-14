@@ -7,8 +7,12 @@ module.exports.create = function (req, res) {
       user: req.user._id,
     },
     function (err) {
-      console.log("error in creating post", err);
+      if (err) {
+        console.log("error in creating a post");
+        return;
+      }
+
+      return res.redirect("back");
     }
   );
-  return res.redirect("back");
 };
