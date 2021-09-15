@@ -9,6 +9,9 @@
         data: $("#new-post-form").serialize(),
         success: function (data) {
           console.log(data);
+          let newPost = newPostDOM(data.data.post);
+          $("#post-list").prepend(newPost);
+          deletePost($(" .delete-post-button", newPost));
         },
         error: function (error) {
           console.log(error.responseText);
@@ -19,9 +22,56 @@
 
   //method to display post on dom
 
-  let newPostDOM = function (post) {
-      return ${``}
+  let newPostDOM = function (i) {
+    return $(`<div id="post-list">
+      <div id="post-${i.id}">
+        <!-- deleting a post  -->
+        <small>
+          <a class="delete-post-button" href="/posts/delete/${i.id}">delete</a>
+        </small>
+    
+        <!-- showing a post  -->
+        ${i.content}
+        <small><p>${i.user.name}</p></small>
+    
+        <!-- comment section  -->
+        <div class="comment-box">
+          <form action="/comments/create" method="POST">
+            <textarea
+              name="content"
+              cols="30"
+              rows="1"
+              placeholder="Start commenting here..."
+              required
+            ></textarea>
+            <input type="hidden" name="post_id" value="${i.id}" />
+            <input type="submit" value="Comment" />
+          </form>
+        </div>
+        <div class="post-comment-list">
+          <ul id="post-comment-${i.id}">
+          </ul>
+        </div>
+      </div>
+    </div>`);
   };
 
+  //method to deletepost
+  let deletePost = function (deleteLink) {
+    $(deleteLink).click(function (e) {
+      e.preventDefault();
+
+      $.ajax({
+        type: "get",
+        url: `${deleteLink}.prop("href")`,
+        success: function (data) {
+          $(`post-${data.data.post_id}`).remove();
+        },
+        error: function (error) {
+          console.log(error.responseText);
+        },
+      });
+    });
+  };
   createPost();
 }
