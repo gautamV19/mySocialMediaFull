@@ -1,11 +1,11 @@
 <div id="post-list">
   <% for(i of posts) { %>
-  <div>
+  <div id="post-<%= i.id %>">
     <% if(locals.user && locals.user.id == i.user.id) { %>
 
     <!-- deleting a post  -->
     <small>
-      <a href="/posts/delete/<%= i.id %>">delete</a>
+      <a class="delete-post-button" href="/posts/delete/<%= i.id %>">delete</a>
     </small>
 
     <!-- showing a post  -->
