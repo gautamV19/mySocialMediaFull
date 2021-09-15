@@ -15,14 +15,12 @@ module.exports.create = async function (req, res) {
     post.comments.push(comment);
     post.save();
     // console.log(post);
-
-    return res.redirect("back");
+    req.flash("success", "Commented");
   } catch (err) {
-    if (err) {
-      console.log("error in commenting on post", err);
-      return;
-    }
+    console.log("error in commenting on post", err);
+    req.flash("error", err);
   }
+  return res.redirect("/");
 };
 
 module.exports.destroy = async function (req, res) {
@@ -40,17 +38,17 @@ module.exports.destroy = async function (req, res) {
           comments: req.params.id,
         },
       });
+      req.flash("success", "Comment Deleted");
     } else {
-      console.log("Unable to delete unauothorized");
+      req.flash("error", "Unauthorize: Unable to delete");
     }
-
-    return res.redirect("/");
   } catch (err) {
     if (err) {
       console.log("Error in removing comment from post", err);
-      return;
+      req.flash("error", err);
     }
   }
+  return res.redirect("/");
 };
 
 //** Garbedge */
