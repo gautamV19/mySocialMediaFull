@@ -3,6 +3,7 @@
   let createPost = function () {
     $("#new-post-form").submit(function (e) {
       e.preventDefault();
+
       $.ajax({
         type: "POST",
         url: "posts/create",
@@ -11,12 +12,12 @@
           console.log(data);
           let newPost = newPostDOM(data.data.post);
           $("#post-list").prepend(newPost);
-          deletePost($(" .delete-post-button", newPost));
         },
         error: function (error) {
           console.log(error.responseText);
         },
       });
+      $("#new-post-form>textarea").val("");
     });
   };
 
@@ -57,21 +58,23 @@
   };
 
   //method to deletepost
-  let deletePost = function (deleteLink) {
-    $(deleteLink).click(function (e) {
-      e.preventDefault();
+  $(".delete-post-button").click(function (e) {
+    e.preventDefault();
 
-      $.ajax({
-        type: "get",
-        url: `${deleteLink}.prop("href")`,
-        success: function (data) {
-          $(`post-${data.data.post_id}`).remove();
-        },
-        error: function (error) {
-          console.log(error.responseText);
-        },
-      });
+    console.log("Delet this post", $(".delete-post-button").prop("href"));
+    $.ajax({
+      type: "get",
+      url: $(".delete-post-button").prop("href"),
+      success: function (data) {
+        console.log(data);
+        console.log(`#post-${data.data.post_id}`);
+        $(`#post-${data.data.post_id}`).remove();
+      },
+      error: function (error) {
+        console.log(error.responseText);
+      },
     });
-  };
+  });
+
   createPost();
 }
