@@ -29,17 +29,3 @@ module.exports.home = async function (req, res) {
 // 1. using then
 // 2. using promise
 // 3. using async await
-
-// .exec(function (err, posts) {
-//   if (err) {
-//     console.log("Error in showing post");
-//     return;
-//   }
-//   User.find({}, function (err, users) {
-//     if (err) {
-//       console.log("Error in showing user");
-//       return;
-//     }
-//            console.log("your posts for home page", posts);
-//   });
-// });

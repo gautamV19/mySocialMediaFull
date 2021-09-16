@@ -1,5 +1,7 @@
 <ul id="post-comment-<%= i.id %>">
-  <% for (comment of i.comments) {%>
+  <% for (let j=i.comments.length - 1;j >0 ; j--) { %>
+  <br />
+  <% let comment = i.comments[j] %>
   <li>
     <!-- deleting a comment  -->
     <% if(locals.user && locals.user.id == comment.user.id) { %>

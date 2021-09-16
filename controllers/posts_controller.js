@@ -17,7 +17,7 @@ module.exports.create = async function (req, res) {
       });
     }
 
-    req.flash("success", "Post Created");
+    // req.flash("success", "Post Created");
   } catch (err) {
     if (err) {
       req.flash("error", err);
