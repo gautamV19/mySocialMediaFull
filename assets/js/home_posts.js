@@ -1,78 +1,210 @@
 {
-  //method to display post on dom
-  let newPostDOM = function (i) {
-    return $(`<div id="post-list">
-        <div id="post-${i.id}">
-          <!-- deleting a post  -->
-          <small>
-            <a class="delete-post-button" href="/posts/delete/${i.id}">delete</a>
-          </small>
-      
-          <!-- showing a post  -->
-          ${i.content}
-          <small><p>${i.user.name}</p></small>
-      
-          <!-- comment section  -->
-          <div class="comment-box">
-            <form action="/comments/create" method="POST">
-              <textarea
-                name="content"
-                cols="30"
-                rows="1"
-                placeholder="Start commenting here..."
-                required
-              ></textarea>
-              <input type="hidden" name="post_id" value="${i.id}" />
-              <input type="submit" value="Comment" />
-            </form>
-          </div>
-          <div class="post-comment-list">
-            <ul id="post-comment-${i.id}">
-            </ul>
-          </div>
-        </div>
-      </div>`);
-  };
+  //** Comment section */
+  // Let's implement this via classes
 
+  // this class would be initialized for every post on the page
+  // 1. When the page loads
+  // 2. Creation of every post dynamically via AJAX
+
+  class PostComments {
+    // constructor is used to initialize the instance of the class whenever a new instance is created
+    constructor(postId) {
+      this.postId = postId;
+      this.postContainer = $(`#post-${postId}`);
+      this.newCommentForm = $(`#post-${postId}-comments-form`);
+
+      this.createComment(postId);
+
+      let self = this;
+      // call for all the existing comments
+      $(" .delete-comment-button", this.postContainer).each(function () {
+        self.deleteComment($(this));
+      });
+    }
+
+    createComment(postId) {
+      let pSelf = this;
+      this.newCommentForm.submit(function (e) {
+        e.preventDefault();
+        let self = this;
+
+        $.ajax({
+          type: "post",
+          url: "/comments/create",
+          data: $(self).serialize(),
+          success: function (data) {
+            console.log("comment create reply", data);
+            // let newComment = pSelf.newCommentDom(data.data.comment);
+            // $(`#post-comments-${postId}`).prepend(newComment);
+            // pSelf.deleteComment($(" .delete-comment-button", newComment));
+
+            new Noty({
+              theme: "relax",
+              text: "Comment published!",
+              type: "success",
+              layout: "topRight",
+              timeout: 1500,
+            }).show();
+          },
+          error: function (error) {
+            console.log(error.responseText);
+          },
+        });
+      });
+    }
+
+    newCommentDom(comment) {
+      // I've added a class 'delete-comment-button' to the delete comment link and also id to the comment's li
+      return $(`<li id="comment-${comment._id}">
+                      <p>
+                          
+                          <small>
+                              <a class="delete-comment-button" href="/comments/delete/${comment._id}">X</a>
+                          </small>
+                          
+                          ${comment.content}
+                          <br>
+                          <small>
+                              ${comment.user.name}
+                          </small>
+                      </p>    
+
+              </li>`);
+    }
+
+    deleteComment(deleteLink) {
+      $(deleteLink).click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+          type: "get",
+          url: $(deleteLink).prop("href"),
+          success: function (data) {
+            $(`#comment-${data.data.comment_id}`).remove();
+
+            new Noty({
+              theme: "relax",
+              text: "Comment Deleted",
+              type: "success",
+              layout: "topRight",
+              timeout: 1500,
+            }).show();
+          },
+          error: function (error) {
+            console.log(error.responseText);
+          },
+        });
+      });
+    }
+  }
+
+  //** Post section */
   // method to submit the form data for new post using AJAX
-  let handlePost = function () {
-    $("#new-post-form").submit(function (e) {
-      e.preventDefault();
+  let createPost = function () {
+    let newPostForm = $("#new-post-form");
 
+    newPostForm.submit(function (e) {
+      e.preventDefault();
+      console.log("posting");
       $.ajax({
-        type: "POST",
-        url: "posts/create",
-        data: $("#new-post-form").serialize(),
+        type: "post",
+        url: "/posts/create",
+        data: newPostForm.serialize(),
         success: function (data) {
-          console.log(data);
-          let newPost = newPostDOM(data.data.post);
-          $("#post-list").prepend(newPost);
+          let newPost = newPostDom(data.data.post);
+          $("#posts-list-container>ul").prepend(newPost);
+          deletePost($(" .delete-post-button", newPost));
+
+          // call the create comment class
+          new PostComments(data.data.post._id);
+
+          new Noty({
+            theme: "relax",
+            text: "Post published!",
+            type: "success",
+            layout: "topRight",
+            timeout: 1500,
+          }).show();
         },
         error: function (error) {
-          console.log("********Its error", error.responseText);
+          console.log(error.responseText);
         },
       });
-      $("#new-post-form>textarea").val("");
     });
+  };
 
-    //method to deletepost
-    $(".delete-post-button").click(function (e) {
+  // method to create a post in DOM
+  let newPostDom = function (post) {
+    return $(`<li id="post-${post._id}">
+                  <p>
+                      
+                      <small>
+                          <a class="delete-post-button"  href="/posts/delete/${post._id}">X</a>
+                      </small>
+                     
+                      ${post.content}
+                      <br>
+                      <small>
+                      ${post.user.name}
+                      </small>
+                  </p>
+                  <div class="post-comments">
+                      
+                          <form id="post-${post._id}-comments-form" action="/comments/create" method="POST">
+                              <input type="text" name="content" placeholder="Type Here to add comment..." required>
+                              <input type="hidden" name="post" value="${post._id}" >
+                              <input type="submit" value="Add Comment">
+                          </form>
+             
+              
+                      <div class="post-comments-list">
+                          <ul id="post-comments-${post._id}">
+                              
+                          </ul>
+                      </div>
+                  </div>
+                  
+              </li>`);
+  };
+
+  // method to delete a post from DOM
+  let deletePost = function (deleteLink) {
+    $(deleteLink).click(function (e) {
       e.preventDefault();
 
-      // console.log("Delet this post", $(".delete-post-button").prop("href"));
       $.ajax({
         type: "get",
-        url: $(".delete-post-button").prop("href"),
+        url: $(deleteLink).prop("href"),
         success: function (data) {
-          console.log(data);
-          // console.log(`#post-${data.data.post_id}`);
           $(`#post-${data.data.post_id}`).remove();
+          new Noty({
+            theme: "relax",
+            text: "Post Deleted",
+            type: "success",
+            layout: "topRight",
+            timeout: 1500,
+          }).show();
         },
         error: function (error) {
-          console.log("********Its error", error.responseText);
+          console.log(error.responseText);
         },
       });
     });
   };
-  handlePost();
+
+  // loop over all the existing posts on the page (when the window loads for the first time) and call the delete post method on delete link of each, also add AJAX (using the class we've created) to the delete button of each
+  let convertPostsToAjax = function () {
+    $("#posts-list-container>ul>li").each(function () {
+      let self = $(this);
+      let deleteButton = $(" .delete-post-button", self);
+      deletePost(deleteButton);
+
+      // get the post's id by splitting the id attribute
+      let postId = self.prop("id").split("-")[1];
+      new PostComments(postId);
+    });
+  };
+
+  createPost();
+  convertPostsToAjax();
 }

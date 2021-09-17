@@ -5,29 +5,32 @@ module.exports.create = async function (req, res) {
   try {
     let post = await Post.findOne({ _id: req.body.post_id });
 
-    let comment = await Comment.create({
-      content: req.body.content,
-      user: req.user._id,
-      post: req.body.post_id,
-    });
-
-    // console.log(comment);
-    post.comments.push(comment);
-    post.save();
-
-    if (req.xhr) {
-      // Similar for comments to fetch the user's id!
-      comment = await comment.populate("user", "name").execPopulate();
-
-      return res.status(200).json({
-        data: {
-          comment,
-        },
-        message: "Post created!",
+    if (post) {
+      let comment = await Comment.create({
+        content: req.body.content,
+        user: req.user._id,
+        post: req.body.post_id,
       });
+
+      console.log(comment);
+      post.comments.push(comment);
+      post.save();
+
+      if (req.xhr) {
+        console.log("inside controller", req);
+        // Similar for comments to fetch the user's id!
+        comment = await comment.populate("user", "name").execPopulate();
+
+        return res.status(200).json({
+          data: {
+            comment,
+          },
+          message: "Comment created!",
+        });
+      }
+      // console.log(post);
+      req.flash("success", "Commented");
     }
-    // console.log(post);
-    req.flash("success", "Commented");
   } catch (err) {
     console.log("error in commenting on post", err);
     req.flash("error", err);
@@ -38,20 +41,20 @@ module.exports.create = async function (req, res) {
 module.exports.destroy = async function (req, res) {
   try {
     let comment = await Comment.findById(req.params.id);
-    let postId = comment.post;
-
-    let post = await Post.findByIdAndUpdate(postId);
 
     if (comment.user == req.user.id) {
-      comment.remove();
+      let postId = comment.post;
 
-      post.update({
+      let post = await Post.findByIdAndUpdate(postId, {
         $pull: {
           comments: req.params.id,
         },
       });
 
+      comment.remove();
+
       if (req.xhr) {
+        console.log("Its xhr for comment");
         return res.status(200).json({
           data: {
             id: req.params.id,
