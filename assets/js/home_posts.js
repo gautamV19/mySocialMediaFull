@@ -45,6 +45,8 @@
               layout: "topRight",
               timeout: 1500,
             }).show();
+
+            $(`#post-${postId}-comments-form>textarea`).val("");
           },
           error: function (error) {
             console.log(error.responseText);
@@ -126,6 +128,8 @@
             layout: "topRight",
             timeout: 1500,
           }).show();
+
+          $("#new-post-form>textarea").val("");
         },
         error: function (error) {
           console.log(error.responseText);
