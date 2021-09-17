@@ -34,9 +34,9 @@
           data: $(self).serialize(),
           success: function (data) {
             console.log("comment create reply", data);
-            // let newComment = pSelf.newCommentDom(data.data.comment);
-            // $(`#post-comments-${postId}`).prepend(newComment);
-            // pSelf.deleteComment($(" .delete-comment-button", newComment));
+            let newComment = pSelf.newCommentDom(data.data.comment);
+            $(`#post-comments-${postId}`).prepend(newComment);
+            pSelf.deleteComment($(" .delete-comment-button", newComment));
 
             new Noty({
               theme: "relax",
@@ -80,7 +80,7 @@
           type: "get",
           url: $(deleteLink).prop("href"),
           success: function (data) {
-            $(`#comment-${data.data.comment_id}`).remove();
+            $(`#comment-${data.data.id}`).remove();
 
             new Noty({
               theme: "relax",
@@ -111,6 +111,7 @@
         url: "/posts/create",
         data: newPostForm.serialize(),
         success: function (data) {
+          console.log("post data", data);
           let newPost = newPostDom(data.data.post);
           $("#posts-list-container>ul").prepend(newPost);
           deletePost($(" .delete-post-button", newPost));

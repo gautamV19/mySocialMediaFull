@@ -3,13 +3,14 @@ const Post = require("../models/post");
 
 module.exports.create = async function (req, res) {
   try {
-    let post = await Post.findOne({ _id: req.body.post_id });
+    console.log("inside comment controller", req.body);
+    let post = await Post.findOne({ _id: req.body.post });
 
     if (post) {
       let comment = await Comment.create({
         content: req.body.content,
         user: req.user._id,
-        post: req.body.post_id,
+        post: req.body.post,
       });
 
       console.log(comment);
@@ -17,7 +18,7 @@ module.exports.create = async function (req, res) {
       post.save();
 
       if (req.xhr) {
-        console.log("inside controller", req);
+        console.log("inside req.xhr", req);
         // Similar for comments to fetch the user's id!
         comment = await comment.populate("user", "name").execPopulate();
 
@@ -28,7 +29,6 @@ module.exports.create = async function (req, res) {
           message: "Comment created!",
         });
       }
-      // console.log(post);
       req.flash("success", "Commented");
     }
   } catch (err) {
