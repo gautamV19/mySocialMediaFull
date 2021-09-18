@@ -1,6 +1,12 @@
 <link rel="stylesheet" href="/css/user_profile.css" />
 <h1><a href="/"> social </a> Profile page</h1>
 
+<img
+  src="<%= user_profile.avatar %>"
+  alt="<%= user_profile.name %>"
+  width="100"
+/>
+
 <% if(locals.user.id==user_profile.id) {%>
 <form
   action="/users/update-profile/<%= user_profile.id %>"
