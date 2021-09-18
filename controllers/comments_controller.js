@@ -19,7 +19,6 @@ module.exports.create = async function (req, res) {
 
       if (req.xhr) {
         console.log("inside req.xhr", req);
-        // Similar for comments to fetch the user's id!
         comment = await comment.populate("user", "name").execPopulate();
 
         return res.status(200).json({

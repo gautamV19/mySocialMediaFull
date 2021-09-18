@@ -2,7 +2,11 @@
 <h1><a href="/"> social </a> Profile page</h1>
 
 <% if(locals.user.id==user_profile.id) {%>
-<form action="/users/update-profile/<%= user_profile.id %>" method="POST">
+<form
+  action="/users/update-profile/<%= user_profile.id %>"
+  enctype="multipart/form-data"
+  method="POST"
+>
   <p>name</p>
   <input type="text" name="name" value="<%= user_profile.name %>" />
   <p>email</p>
@@ -10,6 +14,7 @@
   <!-- implement checking password also  -->
   <!-- <p>Enter password</p> -->
   <!-- <input type="password" name="password" /> -->
+  <input type="file" name="avatar" placeholder="Profile picture" />
   <input type="submit" value="Update" />
 </form>
 <% } else { %>

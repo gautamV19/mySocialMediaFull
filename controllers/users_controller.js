@@ -72,16 +72,33 @@ module.exports.destroySession = function (req, res) {
 };
 
 module.exports.updateProfile = async function (req, res) {
+  console.log(User.uploadedAvatar);
   // implement checking password also
-  try {
-    if (req.params.id == req.user.id) {
-      let user = await User.findByIdAndUpdate(req.params.id, req.body);
+  if (req.params.id == req.user.id) {
+    try {
+      let user = await User.findById(req.params.id);
+      User.uploadedAvatar(req, res, function (err) {
+        if (err) {
+          console.log("*****Multer Error :", err);
+        }
+        user.name = req.body.name;
+        user.email = req.body.email;
+
+        if (req.file) {
+          user.avatar = User.avatarPath + "/" + req.file.filename;
+        }
+
+        user.save();
+      });
+      req.flash("success", "Profile updated");
+
       return res.redirect("back");
-    } else {
-      return res.status(401).send("Unauthorize");
+    } catch (err) {
+      console.log("error in profile update", err);
+      return;
     }
-  } catch (err) {
-    console.log("error in profile update", err);
-    return;
+  } else {
+    req.flash("error", "Unauthorised");
+    return res.status(401).send("Unauthorize");
   }
 };
