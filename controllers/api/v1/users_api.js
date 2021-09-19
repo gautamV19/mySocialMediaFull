@@ -13,9 +13,6 @@ module.exports.createSession = async function (req, res) {
         data: {
           data: req.body,
           user: user,
-          upass: user.password,
-          rpass: req.body.password,
-          match: user.password !== req.body.password,
         },
       });
     }
