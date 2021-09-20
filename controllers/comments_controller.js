@@ -1,9 +1,10 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
+const commentsMailer = require("../mailers/comments_mailer");
 
 module.exports.create = async function (req, res) {
   try {
-    console.log("inside comment controller", req.body);
+    // console.log("inside comment controller", req.body);
     let post = await Post.findOne({ _id: req.body.post });
 
     if (post) {
@@ -13,13 +14,14 @@ module.exports.create = async function (req, res) {
         post: req.body.post,
       });
 
-      console.log(comment);
+      // console.log(comment);
       post.comments.push(comment);
       post.save();
 
+      comment = await comment.populate("user", "name email").execPopulate();
+      commentsMailer.newComment(comment);
       if (req.xhr) {
-        console.log("inside req.xhr", req);
-        comment = await comment.populate("user", "name").execPopulate();
+        // console.log("inside req.xhr", req);
 
         return res.status(200).json({
           data: {
@@ -53,7 +55,7 @@ module.exports.destroy = async function (req, res) {
       comment.remove();
 
       if (req.xhr) {
-        console.log("Its xhr for comment");
+        // console.log("Its xhr for comment");
         return res.status(200).json({
           data: {
             id: req.params.id,
