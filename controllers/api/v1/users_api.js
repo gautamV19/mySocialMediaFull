@@ -1,6 +1,5 @@
 const User = require("../../../models/user");
 const jwt = require("jsonwebtoken");
-const { json } = require("express");
 
 // sign in and create a session for the user
 module.exports.createSession = async function (req, res) {
@@ -17,11 +16,10 @@ module.exports.createSession = async function (req, res) {
       });
     }
 
-    return res.json({
+    return res.json(200, {
       message: "Sign in successfully, here is your token",
       data: {
-        token: jwt.sign(JSON.stringify(user), "codeial"),
-        // TODO expiresIn
+        token: jwt.sign(user.toJSON(), "codeial", { expiresIn: "100000" }),
       },
     });
   } catch (err) {

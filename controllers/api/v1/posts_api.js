@@ -21,16 +21,17 @@ module.exports.index = async function (req, res) {
 module.exports.destroy = async function (req, res) {
   try {
     let post = await Post.findById(req.params.id);
-    // if (post && post.user == req.user.id) {
-    post.remove();
-    await Comment.deleteMany({ post: req.params.id });
-    return res.status(200).json({
-      message: "Post deleted successfully!",
-    });
-    // } else {
-    // req.flash("error", "Unauthorize: You can't delete this post");
-    // return res.status(401).send("Unauthorize");
-    // }
+    if (post.user == req.user.id) {
+      post.remove();
+      await Comment.deleteMany({ post: req.params.id });
+      return res.status(200).json({
+        message: "Post deleted successfully!",
+      });
+    } else {
+      return res.json(401, {
+        message: "You can not delete this post",
+      });
+    }
   } catch (err) {
     console.log("******Error", err);
     return res.json(500, {
