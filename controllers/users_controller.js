@@ -151,5 +151,25 @@ module.exports.resetPassword2 = async function (req, res) {
     });
   }
 
+  req.otp("error", "not valid");
   return res.redirect("/users/sign-in");
+};
+module.exports.newPassword = async function (req, res) {
+  if (req.body.password != req.body.confirm_password) {
+    req.flash("error", "Passwords not matched");
+    return res.redirect("back");
+  }
+
+  console.log("****newPassword", req.body);
+  let user = await User.findById(req.body.id);
+  console.log("****newPassword", user);
+
+  if (user) {
+    user.password = req.body.password;
+    user.save();
+    req.flash("success", "Password updated");
+    return res.redirect(`/users/profile/${req.body.id}`);
+  }
+  req.flash("error", "user not found");
+  return res.redirect("/");
 };
