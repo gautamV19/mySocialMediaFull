@@ -167,6 +167,8 @@ module.exports.newPassword = async function (req, res) {
   if (user) {
     user.password = req.body.password;
     user.save();
+    let resPsw = ResetPassword.findOne({ user: user.id });
+    resPsw.remove();
     req.flash("success", "Password updated");
     return res.redirect(`/users/profile/${req.body.id}`);
   }

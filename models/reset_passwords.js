@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const reset_passwordsSchema = mongoose.Schema(
+const reset_passwordsSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
