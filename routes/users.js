@@ -41,4 +41,8 @@ router.post(
   usersController.updateProfile
 );
 
+router.get("/forgot-password", usersController.forgotPassword);
+router.post("/reset-password", usersController.resetPassword);
+router.post("/reset-password-2", usersController.resetPassword2);
+
 module.exports = router;

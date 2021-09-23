@@ -1,6 +1,10 @@
 const User = require("../models/user");
+const ResetPassword = require("../models/reset_passwords");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
+const passwordMailer = require("../mailers/reset_password_mailer");
+const { render } = require("ejs");
 
 module.exports.profile = async function (req, res) {
   try {
@@ -49,7 +53,7 @@ module.exports.create = async function (req, res) {
     let user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      let userCreated = await User.create(req.body);
+      await User.create(req.body);
       return res.redirect("/users/sign-in");
     } else {
       return res.redirect("back");
@@ -106,4 +110,46 @@ module.exports.updateProfile = async function (req, res) {
     req.flash("error", "Unauthorised");
     return res.status(401).send("Unauthorize");
   }
+};
+
+//forgot  password
+module.exports.forgotPassword = function (req, res) {
+  return res.render("forgotPassword", {
+    title: "social | Forgot Password",
+  });
+};
+
+// reset password
+var code = null;
+module.exports.resetPassword = async function (req, res) {
+  const email = req.body.email;
+
+  let user = await User.findOne({ email: email });
+
+  code = crypto.randomBytes(3).toString("hex");
+
+  passwordMailer.newPassword(user, code);
+
+  await ResetPassword.create({ user: user, otp: code });
+
+  return res.render("resetPassword", {
+    title: "social | Reset Password",
+  });
+};
+
+module.exports.resetPassword2 = async function (req, res) {
+  let otp = req.body.otp;
+
+  if (otp === code) {
+    let resPsw = await ResetPassword.findOne({ otp: otp }).populate("user");
+
+    console.log("*******Reset Password Successfull", resPsw);
+
+    return res.render("resetPassword3", {
+      title: "social | Reset Password",
+      user: resPsw.user,
+    });
+  }
+
+  return res.redirect("/users/sign-in");
 };
