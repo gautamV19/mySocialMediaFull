@@ -11,7 +11,11 @@
     <br />
     <div class="likes">
       <span><%= comment.likes.length %></span>
-      <button class="commentLikeButton" id="<%= comment._id %>">Like</button>
+      <% if (locals.user){ %>
+        <button class="commentLikeButton" id="<%= comment._id %>">Like</button>
+        <% } else { %>
+        <p>likes</p>
+          <% }%>
     </div>
     <small> <%= comment.user.name %> </small>
   </p>

@@ -10,7 +10,12 @@
   </p>
   <div class="likes">
     <span><%= post.likes.length %></span>
+
+    <% if (locals.user){ %>
     <button class="postLikeButton" id="<%= post._id %>">Like</button>
+    <% } else { %>
+    <p>likes</p>
+    <% }%>
   </div>
   <div class="post-comments">
     <% if (locals.user){ %>

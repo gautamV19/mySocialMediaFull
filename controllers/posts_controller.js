@@ -33,8 +33,10 @@ module.exports.destroy = async function (req, res) {
   try {
     let post = await Post.findById(req.params.id);
     if (post && post.user == req.user.id) {
+      await Like.deleteMany({ _id: { $in: post.comments } });
       post.remove();
       await Comment.deleteMany({ post: req.params.id });
+
       await Like.deleteMany({ onModel: "Post", likeable: req.params.id });
 
       if (req.xhr) {

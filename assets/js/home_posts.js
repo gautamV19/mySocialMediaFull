@@ -61,11 +61,20 @@
                       <p>
                           
                           <small>
-                              <a class="delete-comment-button" href="/comments/delete/${comment._id}">X</a>
+                              <a class="delete-comment-button" href="/comments/delete/${
+                                comment._id
+                              }">X</a>
                           </small>
                           
                           ${comment.content}
                           <br>
+                          <div class="likes">
+                            <span>${0}</span>
+                        
+                            <button class="commentLikeButton" id=${
+                              comment._id
+                            }>Like</button>
+                          </div>
                           <small>
                               ${comment.user.name}
                           </small>
@@ -144,7 +153,9 @@
                   <p>
                       
                       <small>
-                          <a class="delete-post-button"  href="/posts/delete/${post._id}">X</a>
+                          <a class="delete-post-button"  href="/posts/delete/${
+                            post._id
+                          }">X</a>
                       </small>
                      
                       ${post.content}
@@ -152,12 +163,24 @@
                       <small>
                       ${post.user.name}
                       </small>
+                      <div class="likes">
+                      <span>${0}</span>
+                  
+                      <button class="postLikeButton" id=${
+                        post._id
+                      }>Like</button>
+                    </div>
+
                   </p>
                   <div class="post-comments">
                       
-                          <form id="post-${post._id}-comments-form" action="/comments/create" method="POST">
+                          <form id="post-${
+                            post._id
+                          }-comments-form" action="/comments/create" method="POST">
                               <input type="text" name="content" placeholder="Type Here to add comment..." required>
-                              <input type="hidden" name="post" value="${post._id}" >
+                              <input type="hidden" name="post" value="${
+                                post._id
+                              }" >
                               <input type="submit" value="Add Comment">
                           </form>
              
