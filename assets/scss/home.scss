@@ -6,8 +6,17 @@
         padding: 10%;
         border-right: 1px solid black;
     }
-    .user-friend{
-        width: 30%;
-        padding: 5%;
+    aside{
+        display: flex;
+        flex-direction: column;
+        #user-friend{
+            width: 30%;
+            padding: 5%;
+        }
+        #users{
+            width: 30%;
+            padding: 5%;
+            margin-top: 50%;
+        }
     }
 }

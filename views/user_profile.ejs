@@ -26,4 +26,7 @@
 <% } else { %>
 <p><%= user_profile.name %></p>
 <p><%= user_profile.email %></p>
+<a href="/friendship/create-friendship?user_id=<%= user_profile.id %>"
+  >Add friend</a
+>
 <% } %>

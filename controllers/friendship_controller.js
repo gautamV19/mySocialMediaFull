@@ -12,9 +12,13 @@ module.exports.createFriendship = async function (req, res) {
     const newFriendship = await Friendship.create({
       from_user: user,
       to_user: hisFriend,
-    }).populate("from_user to_user", "name id email");
+    });
+    // newFriendship.populate("from_user to_user", "name id email");
     user.friendship.push(newFriendship);
     user.save();
+
+    console.log("***user  ", user);
+    console.log("***friendship  ", await Friendship.find({}));
 
     return res.status(200).json({
       message: "Now you're friends with Aakash",
@@ -48,3 +52,5 @@ module.exports.createFriendship = async function (req, res) {
     }
 }
  */
+// 613b4848b9464a1790d501bc
+// http://localhost:8000/friendship/create-friendship?user_id=613b4848b9464a1790d501bc

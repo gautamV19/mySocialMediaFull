@@ -9,7 +9,18 @@
   border-right: 1px solid black;
 }
 
-#home-container .user-friend {
+#home-container aside {
+  display: flex;
+  flex-direction: column;
+}
+
+#home-container aside #user-friend {
   width: 30%;
   padding: 5%;
+}
+
+#home-container aside #users {
+  width: 30%;
+  padding: 5%;
+  margin-top: 50%;
 }
