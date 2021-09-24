@@ -12,12 +12,12 @@ const likeSchema = new mongoose.Schema({
     refPath: "onModel",
   },
   onModel: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
     enum: ["Post", "Comment"],
   },
 });
 
-const Like = mongoose("Like", likeSchema);
+const Like = mongoose.model("Like", likeSchema);
 
 module.exports = Like;

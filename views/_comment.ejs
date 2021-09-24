@@ -9,6 +9,10 @@
     </small>
     <% } %> <%= comment.content %>
     <br />
+    <div class="likes">
+      <span><%= comment.likes.length %></span>
+      <button class="commentLikeButton" id="<%= comment._id %>">Like</button>
+    </div>
     <small> <%= comment.user.name %> </small>
   </p>
 </li>

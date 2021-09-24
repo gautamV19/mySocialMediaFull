@@ -213,3 +213,54 @@
   createPost();
   convertPostsToAjax();
 }
+
+$(".commentLikeButton").click(function (e) {
+  e.preventDefault();
+  console.log("comment liked", e.target.id);
+
+  data = {
+    id: e.target.id,
+    type: "Comment",
+  };
+
+  $.ajax({
+    type: "post",
+    url: "/likes/toggle",
+    data: data,
+    success: function (res) {
+      console.log(res);
+      const htmlString = `<span>${res.data.length}</span>
+      <button class="commentLikeButton" id="${e.target.id}">Like</button>`;
+
+      $(`#comment-${e.target.id}>div.likes`).html(htmlString);
+    },
+    error: function (error) {
+      console.log(error.responseText);
+    },
+  });
+});
+$(".postLikeButton").click(function (e) {
+  e.preventDefault();
+  console.log("post liked", e.target.id);
+
+  data = {
+    id: e.target.id,
+    type: "Post",
+  };
+
+  $.ajax({
+    type: "post",
+    url: "/likes/toggle",
+    data: data,
+    success: function (res) {
+      console.log(res);
+      const htmlString = `<span>${res.data.length}</span>
+      <button class="postLikeButton" id="${e.target.id}">Like</button>`;
+
+      $(`#post-${e.target.id}>div.likes`).html(htmlString);
+    },
+    error: function (error) {
+      console.log(error.responseText);
+    },
+  });
+});

@@ -8,6 +8,10 @@
     <br />
     <small> <%= post.user.name %> </small>
   </p>
+  <div class="likes">
+    <span><%= post.likes.length %></span>
+    <button class="postLikeButton" id="<%= post._id %>">Like</button>
+  </div>
   <div class="post-comments">
     <% if (locals.user){ %>
     <!-- let's give an id to the new comment form, we'll also need to make the same changes in home_posts.js where we're adding a post to the page -->

@@ -42,6 +42,7 @@ module.exports.create = async function (req, res) {
 module.exports.destroy = async function (req, res) {
   try {
     let comment = await Comment.findById(req.params.id);
+    await Like.deleteMany({ onModel: "Comment", likeable: req.params.id });
 
     if (comment.user == req.user.id) {
       let postId = comment.post;
