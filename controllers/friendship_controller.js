@@ -32,6 +32,48 @@ module.exports.createFriendship = async function (req, res) {
     });
   }
 };
+
+module.exports.destroy = async function (req, res) {
+  try {
+    const hisId = req.query.user_id;
+    const user = await User.findById(hisId);
+
+    const reqFriendship = await Friendship.find({
+      from_user: req.user,
+      to_user: user,
+    });
+    reqFriendship.remove();
+    req.user.friendship.pull(hisId);
+
+    return res.status(200).json({
+      message: "Friends removed",
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports.allFriends = async function (req, res) {
+  try {
+    const allFriends = await Friendship.find({ from_user: req.user });
+
+    return res.status(200).json({
+      message: "List of friends for user id 5e33fc7c9cd14572518c16fa",
+      success: true,
+      data: { friends: allFriends },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 /*
 {
 "message": "Now you're friends with Aakash",

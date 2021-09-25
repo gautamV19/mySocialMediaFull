@@ -11,4 +11,16 @@ router.get(
   friendshipController.createFriendship
 );
 
+router.get(
+  "/remove_friendship",
+  passport.checkAuthentication,
+  friendshipController.destroy
+);
+
+router.get(
+  "/fetch_user_friends",
+  passport.checkAuthentication,
+  friendshipController.allFriends
+);
+
 module.exports = router;
