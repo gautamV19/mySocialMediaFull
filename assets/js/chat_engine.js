@@ -36,6 +36,7 @@ class ChatEngine {
             user_email: self.userEmail,
             chatRoom: "first room",
           });
+          $("#chat-message-input").val();
         }
       });
 
@@ -50,7 +51,7 @@ class ChatEngine {
           msgType = "self-message";
         }
 
-        newMessage.addclass(msgType);
+        newMessage.addClass(msgType);
 
         newMessage.append($("<span>", { html: data.message }));
         newMessage.append($("<sub>", { html: data.userEmail }));
