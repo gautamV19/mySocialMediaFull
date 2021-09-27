@@ -1,5 +1,5 @@
 // toDo database model for chats
-
+const env = require("./config/enviroment");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
@@ -23,10 +23,12 @@ const chatSockets = require("./config/chat_sockets").chatSockets(chatServer);
 chatServer.listen(5000);
 console.log("chat server is listening on port 5000");
 
+const path = require("path");
+
 app.use(
   sassMiddleware({
-    src: "./assets/scss",
-    dest: "./assets/css",
+    src: path.join(__dirname, env.asset_path, "scss"),
+    dest: path.join(__dirname, env.asset_path, "css"),
     debug: true,
     outputStyle: "expanded",
     prefix: "/css",
@@ -37,7 +39,7 @@ app.use(express.urlencoded());
 
 app.use(cookieParser());
 
-app.use(express.static("./assets"));
+app.use(express.static(env.asset_path));
 
 app.use(expressLayouts);
 // extract style and scripts from sub pages into the layout
@@ -53,7 +55,7 @@ app.use(
   session({
     name: "social",
     //** TODO change the secret before deployment in production mode */
-    secret: "something",
+    secret: env.session_cookie_key,
     saveUninitialized: false,
     resave: false,
     cookie: {
