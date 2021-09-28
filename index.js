@@ -1,5 +1,6 @@
 // toDo database model for chats
 const env = require("./config/enviroment");
+const logger = require("morgan");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
@@ -25,21 +26,25 @@ console.log("chat server is listening on port 5000");
 
 const path = require("path");
 
-app.use(
-  sassMiddleware({
-    src: path.join(__dirname, env.asset_path, "scss"),
-    dest: path.join(__dirname, env.asset_path, "css"),
-    debug: true,
-    outputStyle: "expanded",
-    prefix: "/css",
-  })
-);
+if (env.name == "development") {
+  app.use(
+    sassMiddleware({
+      src: path.join(__dirname, env.asset_path, "scss"),
+      dest: path.join(__dirname, env.asset_path, "css"),
+      debug: true,
+      outputStyle: "expanded",
+      prefix: "/css",
+    })
+  );
+}
 
 app.use(express.urlencoded());
 
 app.use(cookieParser());
 
 app.use(express.static(env.asset_path));
+
+app.use(logger(env.morgan.mode, env.morgan.options));
 
 app.use(expressLayouts);
 // extract style and scripts from sub pages into the layout
@@ -90,5 +95,7 @@ app.listen(port, function (err) {
     console.log(`Error in running the server: ${err}`);
   }
 
-  console.log(`Server is running on port: ${port}`);
+  console.log(
+    `Server is running on port: ${port} with mode ${process.env.SOCIAL_ENVIROMENT}`
+  );
 });
