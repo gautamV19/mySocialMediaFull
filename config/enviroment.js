@@ -37,7 +37,7 @@ const production = {
   name: "production",
   jwt_secrete_key: process.env.SOCIAL_jwt_secrete_key,
   //todo use process.env
-  asset_path: process.env.SOCIAL_ASSET_PATH,
+  asset_path: eval(process.env.SOCIAL_ASSET_PATH),
   session_cookie_key: process.env.SOCIAL_SESSION_COOKIE_KEY,
   db: eval(process.env.SOCIAL_DB),
   smtp: {
