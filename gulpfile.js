@@ -1,6 +1,6 @@
 const gulp = require("gulp");
 
-const sass = require("gulp-sass");
+var sass = require("gulp-sass")(require("sass"));
 const cssnano = require("gulp-cssnano");
 const rev = require("gulp-rev");
 const uglify = require("gulp-uglify-es").default;
@@ -11,7 +11,7 @@ gulp.task("css", function (done) {
   console.log("minifying css...");
   gulp
     .src("./assets/sass/**/*.scss")
-    .pipe(sass())
+    .pipe(sass().on("error", sass.logError))
     .pipe(cssnano())
     .pipe(gulp.dest("./assets.css"));
 
