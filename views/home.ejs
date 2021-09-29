@@ -42,10 +42,10 @@
     </section>
   </aside>
 </div>
-
-<script src="/js/home_posts.js"></script>
+js/chat_engine.js
+<script src="<%= assetPath("js/home_posts.js") %>" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.min.js"></script>
-<script src="/js/chat_engine.js"></script>
+<script src="<%= assetPath("js/chat_engine.js") %>" ></script>
 <% if (locals.user){ %>
 <script>
   new ChatEngine("user-chat-box", "<%= locals.user.email %>");
